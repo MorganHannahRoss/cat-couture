@@ -14,7 +14,11 @@ const PaginationControls = ({
     <div className="container">
       <div className="controls">
         <div>
-          <button aria-label="Previous page" onClick={onPrev}>
+          <button
+            aria-label="Previous page"
+            onClick={onPrev}
+            disabled={currentPage === 1}
+          >
             <FontAwesomeIcon icon={faChevronLeft} size="2x" />
           </button>
         </div>
@@ -22,7 +26,11 @@ const PaginationControls = ({
           Page {currentPage} of {totalPages}
         </span>
         <div>
-          <button aria-label="Next page" onClick={onNext}>
+          <button
+            aria-label="Next page"
+            onClick={onNext}
+            disabled={currentPage === totalPages}
+          >
             <FontAwesomeIcon icon={faChevronRight} size="2x" />
           </button>
         </div>
