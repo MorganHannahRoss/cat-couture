@@ -3,7 +3,7 @@ const path = require("path");
 const jestOpenAPI = require("jest-openapi").default;
 const app = require("../app");
 const db = require("../db");
-const productRepository = require("./product.repository");
+const productRepository = require("./product.repository.js");
 
 jestOpenAPI(path.join(__dirname, "../apispec.yaml"));
 
@@ -88,13 +88,40 @@ describe("GIVEN that the GET /products route exist", () => {
     });
   });
 
+  //todo
   describe("WHEN the client sends a request for a specific page of products", () => {
-    test.todo(
-      "WHEN the page query parameter is valid as per the API spec THEN return 200 status code and an array of products"
-    );
+    test("WHEN the page query parameter is valid as per the API spec THEN return 200 status code and an array of products", async () => {
+      const totalProducts = await productRepository.getTotalProducts();
+      const paginationPage = 2;
 
-    test.todo(
-      "WHEN the page query parameter is not valid as per the API spec THEN return status 400 and an appropriate error message"
-    );
+      const expectedResponseData = {
+        products: await productRepository.getProducts(
+          defaultLimit,
+          paginationPage - 1
+        ),
+        currentPage: paginationPage,
+        totalPages: Math.ceil(parseInt(totalProducts) / defaultLimit),
+        itemsPerPage: defaultLimit,
+        totalItems: totalProducts,
+      };
+
+      const response = await request(app)
+        .get(`/api/products?page=${paginationPage}`)
+        .set("Accept", "application/json");
+
+      expect(response.status).toBe(200);
+      expect(response.body).toEqual(expectedResponseData);
+      expect(response).toSatisfyApiSpec();
+    });
+
+    test("WHEN the page query parameter is not valid as per the API spec THEN return status 400 and an appropriate error message", async () => {
+      const response = await request(app)
+        .get("/api/products?page=invalid")
+        .set("Accept", "application/json");
+
+      expect(response.status).toBe(400);
+      expect(response.body.message).toBe('"page" must be a number');
+      expect(response).toSatisfyApiSpec();
+    });
   });
 });
