@@ -21,11 +21,37 @@ describe("PaginationControls", () => {
     expect(onPrev).not.toHaveBeenCalled();
   });
 
-  test.todo(
-    "WHEN the user is on the second page of the main product page, THEN the previous/back button of the pagination control will be enabled."
-  );
+  test("WHEN the user is on the second page of the main product page, THEN the previous/back button of the pagination control will be enabled.", () => {
+    // render
+    render(
+      <PaginationControls
+        onNext={() => {}}
+        onPrev={() => {}}
+        currentPage={2} //second page
+        totalPages={5}
+      />
+    );
 
-  test.todo(
-    "WHEN the user is on the last page of the main product page, THEN next button of the pagination control will be disabled."
-  );
+    // checking for the previous page button
+    const previousButton = screen.getByRole("button", {
+      name: "Previous page",
+    });
+    expect(previousButton).not.toBeDisabled();
+  });
+
+  test("WHEN the user is on the last page of the main product page, THEN next button of the pagination control will be disabled.", () => {
+    // render
+    render(
+      <PaginationControls
+        onNext={() => {}}
+        onPrev={() => {}}
+        currentPage={5} // last page / page total
+        totalPages={5}
+      />
+    );
+
+    // checking for next page button disabled
+    const nextPageButton = screen.getByRole("button", { name: "Next page" });
+    expect(nextPageButton).toBeDisabled();
+  });
 });
