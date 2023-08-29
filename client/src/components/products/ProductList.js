@@ -5,6 +5,7 @@ const ProductList = ({ products, className }) => {
     <ul className={className}>
       {products.map((product) => (
         <Product
+          key={product.id}
           name={product.name}
           description={product.description}
           price={product.price}
