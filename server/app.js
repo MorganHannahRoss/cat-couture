@@ -9,6 +9,7 @@ const swaggerUi = require("swagger-ui-express");
 const productRouter = require("./products/product.router");
 const reportRouter = require("./reports/report.router");
 const errorHandlerMiddleware = require("./middleware/errorHandlerMiddleware");
+const { checkJwt } = require("./middleware/authorizationMiddleware");
 
 const swaggerDocument = yaml.load(
   fs.readFileSync(path.join(__dirname, "./apispec.yaml"), "utf8")
@@ -20,7 +21,7 @@ app.use(express.json());
 
 // routes
 app.use("/api/products", productRouter);
-app.use("/api/reports", reportRouter);
+app.use("/api/reports", checkJwt, reportRouter);
 app.use("/", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 // error handling middleware
