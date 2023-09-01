@@ -10,7 +10,7 @@ describe("PaginationControls", () => {
         onNext={() => {}}
         onPrev={onPrev}
         currentPage={1}
-        totalPages={5}
+        totalPages={10}
       />
     );
     const previousButton = screen.getByRole("button", {
@@ -28,7 +28,7 @@ describe("PaginationControls", () => {
         onNext={() => {}}
         onPrev={() => {}}
         currentPage={2} //second page
-        totalPages={5}
+        totalPages={10}
       />
     );
 
@@ -45,8 +45,8 @@ describe("PaginationControls", () => {
       <PaginationControls
         onNext={() => {}}
         onPrev={() => {}}
-        currentPage={5} // last page / page total
-        totalPages={5}
+        currentPage={10} // last page / page total
+        totalPages={10}
       />
     );
 
