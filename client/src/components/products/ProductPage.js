@@ -10,9 +10,9 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
   const [products, setProducts] = useState([]);
-  //add?
+  //add
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = 2;
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     // We use AbortController (https://developer.mozilla.org/en-US/docs/Web/API/AbortController)
@@ -24,13 +24,12 @@ const ProductPage = () => {
       try {
         setLoading(true);
         setError(false);
-        const result = await api.getProducts();
-        if (!result.ok) {
-          throw new Error("API Error");
-        }
-        const data = await result.json();
+
+        const data = await api.getProducts(currentPage, 10);
+
         if (!abortController.signal.aborted) {
           setProducts(data.products);
+          setTotalPages(data.totalPages);
         }
       } catch (error) {
         if (!abortController.signal.aborted) {
@@ -46,7 +45,7 @@ const ProductPage = () => {
     fetchData();
 
     return () => abortController.abort();
-  }, []);
+  }, [currentPage, totalPages]);
 
   return (
     <main className="main-layout section-padding">
@@ -54,8 +53,16 @@ const ProductPage = () => {
       {error && <ErrorMessage message="Error fetching products" />}
 
       <PaginationControls
-        onPrev={() => setCurrentPage(currentPage - 1)}
-        onNext={() => setCurrentPage(currentPage + 1)}
+        onPrev={() => {
+          if (currentPage > 1) {
+            setCurrentPage(currentPage - 1);
+          }
+        }}
+        onNext={() => {
+          if (currentPage < totalPages) {
+            setCurrentPage(currentPage + 1);
+          }
+        }}
         currentPage={currentPage}
         totalPages={totalPages}
       />
