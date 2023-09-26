@@ -12,7 +12,7 @@ const Product = ({
   return (
     <li className="product">
       <div className="card">
-        <div>
+        <div className="product-card">
           {imageName ? (
             <img
               src={`./img/${imageName}`}

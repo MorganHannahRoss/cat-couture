@@ -2,26 +2,33 @@ openapi: "3.0.2"
 info:
   version: "1.0"
   title: Welcome to the Products API!
-  description: This API allows user to handle products
+  description: This API allows users to handle products and reports.
 servers:
   - url: "http://localhost:5001/api"
     description: Development server
 paths:
   /products:
     get:
-      summary: Returns a list of products
-      description: Get a list of products
+      summary: Returns a list of products with pagination
+      description: Get a list of products with optional pagination.
       operationId: get-products
       tags:
         - products
       parameters:
-        - schema:
+        - name: page
+          in: query
+          description: The page number to retrieve (default is 1).
+          required: false
+          schema:
             type: integer
             minimum: 1
+        - name: limit
           in: query
-          name: limit
-          description: The number of products to return
+          description: The number of products per page (default is 10).
           required: false
+          schema:
+            type: integer
+            minimum: 1
       responses:
         200:
           description: OK
@@ -54,6 +61,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
         500:
           description: Internal Server Error
           content:
@@ -63,7 +82,7 @@ paths:
   /reports:
     get:
       summary: Returns a list of reports
-      description: Get a list of reports
+      description: Get a list of reports.
       operationId: get-reports
       security:
         - bearerAuth: []
@@ -76,6 +95,31 @@ paths:
             application/json:
               schema:
                 type: object
+                properties:
+                  reports:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Report"
+                required:
+                  - reports
+        401:
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        403:
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        500:
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 components:
   securitySchemes:
     bearerAuth:
@@ -118,6 +162,19 @@ components:
         - imageDescription
         - discountValue
         - discountType
+    Report:
+      type: object
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        content:
+          type: string
+      required:
+        - id
+        - title
+        - content
     Error:
       type: object
       properties:
@@ -125,3 +182,4 @@ components:
           type: string
 tags:
   - name: products
+  - name: reports

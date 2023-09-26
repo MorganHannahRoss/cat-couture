@@ -88,19 +88,19 @@ describe("GIVEN that the GET /products route exist", () => {
     });
   });
 
-  //todo
   describe("WHEN the client sends a request for a specific page of products", () => {
     test("WHEN the page query parameter is valid as per the API spec THEN return 200 status code and an array of products", async () => {
       const totalProducts = await productRepository.getTotalProducts();
       const paginationPage = 2;
+      const defaultLimit = 10;
 
       const expectedResponseData = {
-        products: await productRepository.getProducts(
-          defaultLimit,
-          paginationPage - 1
+        products: await productRepository.getProductPagination(
+          paginationPage,
+          defaultLimit
         ),
         currentPage: paginationPage,
-        totalPages: Math.ceil(parseInt(totalProducts) / defaultLimit),
+        totalPages: Math.ceil(totalProducts / defaultLimit),
         itemsPerPage: defaultLimit,
         totalItems: totalProducts,
       };

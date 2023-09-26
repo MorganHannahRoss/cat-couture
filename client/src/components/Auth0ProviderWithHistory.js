@@ -8,6 +8,8 @@ const Auth0ProviderWithHistory = ({ children }) => {
   const audience = process.env.REACT_APP_AUTH0_AUDIENCE;
   const scope = "read:reports";
 
+  console.log(domain);
+
   const onRedirectCallback = (appState) => {
     navigate(appState?.returnTo || window.location.pathname);
   };
