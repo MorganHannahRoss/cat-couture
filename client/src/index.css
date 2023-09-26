@@ -118,6 +118,15 @@ code {
 .button {
   background-color: black;
   color: white;
+  border-radius: 4px;
+  padding: 1rem 0;
+  display: inline-block;
+  margin-top: 1rem;
+  width: 100%;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
 }
 .container {
   display: flex;
@@ -158,13 +167,35 @@ code {
   color: #000000;
   background: rgba(0, 0, 0, 0.1);
 }
+.container {
+  display: grid;
+  grid-template-columns: auto;
+  padding: 2rem;
+  gap: 2rem;
+  align-items: start;
+}
 
+.product-card {
+  grid-gap: 1rem;
+  gap: 1rem;
+  grid-template-rows: 1fr 1fr;
+  margin-bottom: 2rem;
+  max-width: fit-content;
+  display: grid; /* Add this line to enable grid layout */
+}
 
-@media only screen and (min-width: 672px) {
-  .half-width {
-    max-width: 672px;
+@media screen and (min-width: 40rem) {
+  .product-card {
+    grid-template-columns: 1fr 1fr;
   }
 }
+
+@media screen and (min-width: 65rem) {
+  .product-card {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
+}
+
 .left-align {
   text-align: left;
 }
